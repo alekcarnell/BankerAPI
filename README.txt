@@ -36,7 +36,7 @@ may be some expansion on this in the future.
 ### 1. Clone the project
 
 ```
-git clone https://github.com/yourusername/bank-rates-api.git
+git clone https://github.com/yourusername/BankerAPI.git
 cd bank-rates-api
 ```
 
