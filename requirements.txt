@@ -1,0 +1,3 @@
+### List of required dependencies to run this project:
+
+Flask>=2.0,<3.0
