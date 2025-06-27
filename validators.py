@@ -22,12 +22,16 @@ def validate_rate_input(data, require_all_fields=True):
         if missing:
             return False, f"Missing fields: {', '.join(missing)}"
 
+    # Define allowed values for appropriate fields:
+    allowed_compounding_values = {"monthly", "annually"}
+
     # Iterate over the fields pulling the "value" from the input and comparing it to the "field" of our JSON structure. 
     for field in required_fields: # Loop over the expected fields. (country, bank, interest_rate)
         if field in data: # Only proceed if the field was included in the incoming data
             value = data[field] # Grab the user-provided data for the field 
             if isinstance(value, str) and not value.strip(): # strip() remove leading and trailing white spaces and then will check if the field was empty after that operation. 
                 return False, f"Field '{field}' cannot be empty"
+
             # Check that interest rate is a postive integer or floating integer
             if field == "interest_rate":
                 try: # Try turning the value to a float. 2.5 -> 2 will work. "Hello" will not convert and error out
@@ -37,8 +41,14 @@ def validate_rate_input(data, require_all_fields=True):
                     cleaned[field] = value # Store the float as our sanitized value
                 except ValueError:
                     return False, "interest_rate must be a number"
+       
+            elif field == "compounding":
+                if value.lower() not in allowed_compounding_values:
+                    return False, f"compounding must be one of {', '.join(allowed_compounding_values)}"
+                cleaned[field] = value.lower()
+           
             else:
                 cleaned[field] = value.strip() if isinstance(value, str) else value
 
     # Return the True boolean and our sanitized data
-    return True, cleaned
+    return True, cleaned  
